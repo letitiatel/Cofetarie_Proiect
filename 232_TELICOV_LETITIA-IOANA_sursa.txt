@@ -1,0 +1,590 @@
+EX 4
+
+create table Job (
+    job_id number(6) constraint pk_job primary key,
+    job_titlu varchar2(50) constraint job_titlu_null not null 
+);
+
+create table DetaliiJob(
+    detaliijob_id number(6) constraint pk_detaliijob primary key,
+    nr_angajati number(5) constraint nr_angajati_null not null ,
+    job_id number(6) not null,
+    constraint fk_job foreign key (job_id) references Job(job_id)
+
+);
+
+create table Angajat(
+    angajat_id number(6) constraint pk_angajat primary key,
+    nume varchar2(50) constraint nume_null not null ,
+    prenume varchar2(50) constraint prenume_null not null ,
+    nr_telefon number(16) constraint nr_telefon_null not null ,
+    job_id number(6) not null,
+    salariu number(5) constraint salariu_null not null ,
+    constraint fk_job_v foreign key (job_id) references Job(job_id)
+    
+);
+
+create table Locatie(
+    locatie_id number(6) constraint pk_locatie primary key,
+    adresa varchar2(50) constraint adresa_null not null ,
+    oras  varchar2(50) constraint oras_null not null ,
+    furnizor_id number(6) not null,
+    constraint fk_furnizor foreign key (furnizor_id) references Furnizor(furnizor_id)
+);
+
+create table Rezervare(
+    rezervare_id number(6) constraint pk_rezervare primary key,
+    client_id number(6) not null,
+    locatie_id number(6) not null,
+    data_rezervare date,
+    numar_pers number(30) constraint numar_pers_null not null ,
+    constraint fk_client_r foreign key (client_id) references Client(client_id),
+    constraint fk_locatie_r foreign key (locatie_id) references Locatie(locatie_id)
+);
+
+create table Client(
+     client_id number(6) constraint pk_client primary key,
+     comanda_id number(6) not null,
+     plata_id number(6) not null,
+     nume1 varchar2(50) constraint nume1_null not null ,
+     prenume1 varchar2(50) constraint prenume1_null not null ,
+     constraint fk_comanda foreign key (comanda_id) references Comanda(comanda_id),
+     constraint fk_plata foreign key (plata_id) references Plata(plata_id)
+);
+
+create table Comanda(
+     comanda_id number(6) constraint pk_comanda primary key,
+     data_comanda date,
+     status varchar2(50) constraint status_null not null ,
+     detaliucomanda_id number(6) not null,
+     constraint fk_detaliucomanda foreign key (detaliucomanda_id) references DetaliiComanda(detaliucomanda_id)
+);
+
+create table DetaliiComanda(
+    detaliucomanda_id number(6) constraint pk_detaliucomanda primary key,
+    pret_unitar number(5) constraint pret_unitar_null not null ,
+    reteta_id number(6) not null,
+    cantitate number(5) constraint cantitate_null not null ,
+    constraint fk_reteta foreign key (reteta_id) references Reteta(reteta_id)
+);
+
+create table Plata(
+    plata_id number(6) constraint pk_plata primary key
+);
+
+create table Recenzie(
+    recenzie_id number(6) constraint pk_recenzie primary key,
+    client_id number(6) not null,
+    rating number(16) constraint rating_null not null,
+    constraint fk_client_v foreign key (client_id) references Client(client_id)
+);
+
+create table Promotie(
+    promotie_id number(6) constraint pk_promotie primary key,
+    data_inceput1 date  ,
+    data_sfarsit1 date not null ,
+    nume_promotie varchar2(50) constraint nume_promotie_null not null 
+
+);
+
+create table Reteta(
+    reteta_id number(6) constraint pk_reteta primary key,
+    nume_reteta varchar2(50) constraint nume_reteta_null not null, 
+    promotie_id number(6) not null,
+    constraint fk_promotie foreign key (promotie_id) references Promotie(promotie_id)
+);
+
+create table Angajat_loc(
+    angajatloc_id number(6) constraint pk_angajatloc primary key,
+    angajat_id number(6) not NULL,
+    locatie_id number(6) not NULL,
+    constraint fk_angajat_a foreign key (angajat_id) references Angajat(angajat_id),
+    constraint fk_locatie_a foreign key (locatie_id) references Locatie(locatie_id)
+);
+
+create table Comanda_loc(
+    comandaloc_id number(6) constraint pk_comandaloc primary key,
+    locatie_id number(6) not NULL,
+    comanda_id number(6) not NULL,
+    constraint fk_locatie_c foreign key (locatie_id) references Locatie(locatie_id),
+    constraint fk_comanda_c foreign key (comanda_id) references Comanda(comanda_id) 
+);
+
+create table Furnizor(
+    furnizor_id number(6) constraint pk_furnizor primary key,
+    telefon_furnizor varchar2(50) constraint telefon_furnizor_null not null ,
+    nume_furnizor varchar2(50) constraint nume_furnizor_null not null 
+
+);
+
+--EX 5
+
+insert into Angajat(angajat_id, nume, prenume,nr_telefon,job_id,salariu) values (1001,'Cristescu','Lili',0768567892,10,2300);
+insert into Angajat(angajat_id, nume, prenume,nr_telefon,job_id,salariu) values (1002,'Georgescu','Marian',0756567892,11,1800);
+insert into Angajat(angajat_id, nume, prenume,nr_telefon,job_id,salariu) values (1003,'Patriche','Stefan',0756567522,12,1900);
+insert into Angajat(angajat_id, nume, prenume,nr_telefon,job_id,salariu) values (1004,'Soritu','Magda',0751267892,13,2000);
+insert into Angajat(angajat_id, nume, prenume,nr_telefon,job_id,salariu) values (1005,'Macrinu','Emilia',0756561092,14,2100);
+insert into Angajat(angajat_id, nume, prenume,nr_telefon,job_id,salariu) values (1006,'Bivoiu','Catalin',0786567892,10,2300);
+insert into Angajat(angajat_id, nume, prenume,nr_telefon,job_id,salariu) values (1007,'Alexandru','Anastasia',0756907892,14,2100);
+insert into Angajat(angajat_id, nume, prenume,nr_telefon,job_id,salariu) values (1008,'Ionisor','Sebastian',0756567412,15,2500);
+insert into Angajat(angajat_id, nume, prenume,nr_telefon,job_id,salariu) values (1009,'Iliasu','Corina',0797567892,12,1900);
+insert into Angajat(angajat_id, nume, prenume,nr_telefon,job_id,salariu) values (1010,'Mehedinti','George',0756564492,13,2000);
+
+insert into Job(job_id,job_titlu) values (10,'Cofetar');
+insert into Job(job_id,job_titlu) values (11,'Casier');
+insert into Job(job_id,job_titlu) values (12,'Personal servire');
+insert into Job(job_id,job_titlu) values (13,'Barista');
+insert into Job(job_id,job_titlu) values (14,'Decorator torturi');
+insert into Job(job_id,job_titlu) values (15,'Manager');
+
+insert into DetaliiJob(detaliijob_id,nr_angajati,job_id) values (100,2,10);
+insert into DetaliiJob(detaliijob_id,nr_angajati,job_id) values (101,1,11);
+insert into DetaliiJob(detaliijob_id,nr_angajati,job_id) values (102,2,12);
+insert into DetaliiJob(detaliijob_id,nr_angajati,job_id) values (103,2,13);
+insert into DetaliiJob(detaliijob_id,nr_angajati,job_id) values (104,2,14);
+insert into DetaliiJob(detaliijob_id,nr_angajati,job_id) values (105,1,15);
+
+insert into Locatie(locatie_id,adresa,oras,furnizor_id) values (1,'Strada Bisnit nr. 8','Bucuresti',700);
+insert into Locatie(locatie_id,adresa,oras,furnizor_id) values (2,'Strada Colos nr. 26','Bucuresti',701);
+insert into Locatie(locatie_id,adresa,oras,furnizor_id) values (3,'Strada Alescu nr. 12','Bucuresti',702);
+insert into Locatie(locatie_id,adresa,oras,furnizor_id) values (4,'Strada Democratiei nr. 7','Bucuresti',703);
+insert into Locatie(locatie_id,adresa,oras,furnizor_id) values (5,'Strada Razboieni nr. 13','Bucuresti',704);
+
+insert into Furnizor(furnizor_id,nume_furnizor,telefon_furnizor) values (700,'CrissFoods',0745520552);
+insert into Furnizor(furnizor_id,nume_furnizor,telefon_furnizor) values (701,'Boromir',0745520523);
+insert into Furnizor(furnizor_id,nume_furnizor,telefon_furnizor) values (702,'Pakmaia',0745520232);
+insert into Furnizor(furnizor_id,nume_furnizor,telefon_furnizor) values (703,'Agrana',0790520552);
+insert into Furnizor(furnizor_id,nume_furnizor,telefon_furnizor) values (704,'Raureni',0745544552);
+insert into Client(client_id,comanda_id,plata_id,nume1,prenume1) values (60,600,90,'Constantin','Eusebiu');
+insert into Client(client_id,comanda_id,plata_id,nume1,prenume1) values (61,601,91,'Marinache','Cristina');
+insert into Client(client_id,comanda_id,plata_id,nume1,prenume1) values (62,602,92,'Mocanu','Claudiu');
+insert into Client(client_id,comanda_id,plata_id,nume1,prenume1) values (63,603,93,'Caragea','Mihaela');
+insert into Client(client_id,comanda_id,plata_id,nume1,prenume1) values (64,604,94,'Miron','Robert');
+
+insert into Rezervare(rezervare_id,client_id,locatie_id,data_rezervare,numar_pers) values (70,60,1,'12-JUN-2023',10);
+insert into Rezervare(rezervare_id,client_id,locatie_id,data_rezervare,numar_pers) values (71,61,2,'10-JUL-2023',11);
+insert into Rezervare(rezervare_id,client_id,locatie_id,data_rezervare,numar_pers) values (72,62,3,'23-JUN-2023',12);
+insert into Rezervare(rezervare_id,client_id,locatie_id,data_rezervare,numar_pers) values (73,63,4,'11-JUL-2023',21);
+insert into Rezervare(rezervare_id,client_id,locatie_id,data_rezervare,numar_pers) values (74,64,5,'12-JUL-2023',7);
+
+insert into Comanda(comanda_id,data_comanda,status,detaliucomanda_id) values (600,'28-JUN-2023','in proces',30);
+insert into Comanda(comanda_id,data_comanda,status,detaliucomanda_id) values (601,'30-DEC-2023','finalizata',31);
+insert into Comanda(comanda_id,data_comanda,status,detaliucomanda_id) values (602,'09-JUL-2023','in proces',32);
+insert into Comanda(comanda_id,data_comanda,status,detaliucomanda_id) values (603,'29-JUN-2023','finalizata',33);
+insert into Comanda(comanda_id,data_comanda,status,detaliucomanda_id) values (604,'29-JUN-2023','in proces',34);
+
+insert into DetaliiComanda(detaliucomanda_id,pret_unitar,reteta_id,cantitate) values (30,12,40,1);
+insert into DetaliiComanda(detaliucomanda_id,pret_unitar,reteta_id,cantitate) values (31,54,41,3);
+insert into DetaliiComanda(detaliucomanda_id,pret_unitar,reteta_id,cantitate) values (32,70,42,1);
+insert into DetaliiComanda(detaliucomanda_id,pret_unitar,reteta_id,cantitate) values (33,40,43,2);
+insert into DetaliiComanda(detaliucomanda_id,pret_unitar,reteta_id,cantitate) values (34,35,44,4);
+insert into DetaliiComanda(detaliucomanda_id,pret_unitar,reteta_id,cantitate) values (35,60,45,1);
+insert into DetaliiComanda(detaliucomanda_id,pret_unitar,reteta_id,cantitate) values (36,70,46,2);
+insert into DetaliiComanda(detaliucomanda_id,pret_unitar,reteta_id,cantitate) values (37,23,47,3);
+insert into DetaliiComanda(detaliucomanda_id,pret_unitar,reteta_id,cantitate) values (38,30,48,1);
+insert into DetaliiComanda(detaliucomanda_id,pret_unitar,reteta_id,cantitate) values (39,25,49,3);
+
+insert into Plata(plata_id) values (90);
+insert into Plata(plata_id) values (91);
+insert into Plata(plata_id) values (92);
+insert into Plata(plata_id) values (93);
+insert into Plata(plata_id) values (94);
+
+insert into Recenzie(recenzie_id,client_id,rating) values (80,60,10);
+insert into Recenzie(recenzie_id,client_id,rating) values (81,61,8);
+insert into Recenzie(recenzie_id,client_id,rating) values (82,62,9);
+insert into Recenzie(recenzie_id,client_id,rating) values (83,63,10);
+insert into Recenzie(recenzie_id,client_id,rating) values (84,64,7);
+
+insert into Promotie(promotie_id,data_inceput1,data_sfarsit1,nume_promotie) values (2000,'01-JUN-2023', '10-JUL-2023','cumperi un tort si primesti si un ornament gratis');
+insert into Promotie(promotie_id,data_inceput1,data_sfarsit1,nume_promotie) values (2001,'16-JUN-2023', '25-JUN-2023','promotie 10% la orice produs');
+insert into Promotie(promotie_id,data_inceput1,data_sfarsit1,nume_promotie) values (2002,'01-FEB-2023', '10-FEB-2023','promotie 5% la orice produs mic-dejun ');
+insert into Promotie(promotie_id,data_inceput1,data_sfarsit1,nume_promotie) values (2003,'23-OCT-2023', '31-OCT-2023','cumperi un tort si al doilea ales este gratis');
+insert into Promotie(promotie_id,data_inceput1,data_sfarsit1,nume_promotie) values (2004,'07-JUN-2023', '10-JUN-2023','cumpara un croissant/briosa si primesti o surpriza');
+
+insert into Reteta(reteta_id,nume_reteta,promotie_id) values (40,'Tort Red Velvet',2000);
+insert into Reteta(reteta_id,nume_reteta,promotie_id) values (41,'Tiramisu',2001);
+insert into Reteta(reteta_id,nume_reteta,promotie_id) values (42,'Macarons',2001);
+insert into Reteta(reteta_id,nume_reteta,promotie_id) values (43,'Briose',2004);
+insert into Reteta(reteta_id,nume_reteta,promotie_id) values (44,'Cheesecake cu fructe de pădure',2003);
+insert into Reteta(reteta_id,nume_reteta,promotie_id) values (45,'Eclair',2001);
+insert into Reteta(reteta_id,nume_reteta,promotie_id) values (46,'Tort Oreo',2000);
+insert into Reteta(reteta_id,nume_reteta,promotie_id) values (47,'Almond Joy',2001);
+insert into Reteta(reteta_id,nume_reteta,promotie_id) values (48,'Prajituri cu crema',2002);
+insert into Reteta(reteta_id,nume_reteta,promotie_id) values (49,'Croissant',2004);
+
+insert into Angajat_loc(angajatloc_id,angajat_id,locatie_id) values(3000,1001,1);
+insert into Angajat_loc(angajatloc_id,angajat_id,locatie_id) values(3001,1002,2);
+insert into Angajat_loc(angajatloc_id,angajat_id,locatie_id) values(3002,1003,2);
+insert into Angajat_loc(angajatloc_id,angajat_id,locatie_id) values(3003,1004,3);
+insert into Angajat_loc(angajatloc_id,angajat_id,locatie_id) values(3004,1005,1);
+insert into Angajat_loc(angajatloc_id,angajat_id,locatie_id) values(3005,1006,2);
+insert into Angajat_loc(angajatloc_id,angajat_id,locatie_id) values(3006,1007,4);
+insert into Angajat_loc(angajatloc_id,angajat_id,locatie_id) values(3007,1008,3);
+insert into Angajat_loc(angajatloc_id,angajat_id,locatie_id) values(3008,1009,4);
+insert into Angajat_loc(angajatloc_id,angajat_id,locatie_id) values(3009,1010,3);
+
+insert into Comanda_loc(comandaloc_id,locatie_id,comanda_id) values (7000,2,600);
+insert into Comanda_loc(comandaloc_id,locatie_id,comanda_id) values (7001,5,601);
+insert into Comanda_loc(comandaloc_id,locatie_id,comanda_id) values (7002,4,601);
+insert into Comanda_loc(comandaloc_id,locatie_id,comanda_id) values (7003,3,602);
+insert into Comanda_loc(comandaloc_id,locatie_id,comanda_id) values (7004,4,600);
+insert into Comanda_loc(comandaloc_id,locatie_id,comanda_id) values (7005,1,603);
+insert into Comanda_loc(comandaloc_id,locatie_id,comanda_id) values (7006,5,603);
+insert into Comanda_loc(comandaloc_id,locatie_id,comanda_id) values (7007,2,604);
+insert into Comanda_loc(comandaloc_id,locatie_id,comanda_id) values (7008,1,604);
+insert into Comanda_loc(comandaloc_id,locatie_id,comanda_id) values (7009,3,602);
+
+--EX 6
+
+      CREATE OR REPLACE PROCEDURE DisplayReservationDetails(
+    location_id_param IN NUMBER
+)
+IS
+    TYPE ReservationInfoType IS RECORD (
+        reservation_date DATE,
+        employee_count NUMBER,
+        client_name VARCHAR2(50)
+    );
+
+    TYPE DateReservations IS TABLE OF DATE INDEX BY PLS_INTEGER;
+    TYPE EmployeeCounts IS TABLE OF ReservationInfoType ;
+    TYPE ClientNames IS VARRAY(50) OF ReservationInfoType;
+
+    reservation_dates DateReservations;
+    reservation_employee_counts EmployeeCounts;
+    reservation_client_names ClientNames;
+BEGIN
+    
+    reservation_dates := DateReservations();
+    reservation_employee_counts := EmployeeCounts();
+    reservation_client_names := ClientNames();
+
+    
+    FOR rec IN (
+        SELECT r.data_rezervare, COUNT(DISTINCT al.angajat_id) AS  employee_count, c.nume1 AS client_name
+        FROM Rezervare r
+        JOIN Angajat_Loc al ON r.locatie_id = al.locatie_id
+        JOIN Angajat a ON al.angajat_id = a.angajat_id
+        JOIN Client c ON r.client_id = c.client_id
+        WHERE r.locatie_id = location_id_param
+        GROUP BY r.data_rezervare, c.nume1
+    ) 
+    LOOP
+        
+        reservation_dates(reservation_dates.COUNT + 1) := rec.data_rezervare;
+        
+        IF rec.employee_count IS NOT NULL THEN
+                reservation_employee_counts.extend;
+                reservation_employee_counts(reservation_employee_counts.LAST). employee_count := rec. employee_count;
+            ELSE
+                
+               reservation_employee_counts.extend;
+               reservation_employee_counts(reservation_employee_counts.LAST). employee_count := 0;
+            END IF;
+
+        reservation_client_names.extend;
+        reservation_client_names(reservation_client_names.LAST).client_name := rec.client_name;
+
+    END LOOP;
+
+   
+    FOR i IN reservation_dates.FIRST..reservation_dates.LAST
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('Rezervare la data: ' || TO_CHAR(reservation_dates(i), 'DD-MON-YYYY'));
+        DBMS_OUTPUT.PUT_LINE('Numarul angajatilor care lucreaza în locatia respectiva: ' || reservation_employee_counts(i).employee_count);
+        DBMS_OUTPUT.PUT_LINE('Numele clientului: ' || reservation_client_names(i).client_name);
+    END LOOP;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN       
+        DBMS_OUTPUT.PUT_LINE('Nu au fost gasite rezervari pentru locatia specificata.');
+    WHEN OTHERS THEN       
+        DBMS_OUTPUT.PUT_LINE('A aparut o eroare neasteptata: ' || SQLERRM);
+END DisplayReservationDetails;
+/
+
+BEGIN
+    
+    DisplayReservationDetails(1); 
+END;
+/
+
+
+--EX 7
+
+   CREATE OR REPLACE PROCEDURE CalculateTotalSalariesForEachLocation AS
+
+   
+    --CURSOR LocationCursor IS
+     --   SELECT DISTINCT locatie_id
+       -- FROM Angajat_Loc;
+    
+  
+    CURSOR SalaryCursor (location_id NUMBER) IS
+        SELECT salariu
+        FROM Angajat_Loc al
+        JOIN Angajat a ON al.angajat_id = a.angajat_id
+        WHERE al.locatie_id = location_id;
+    
+    
+    total_salary NUMBER;
+BEGIN
+   
+    FOR loc IN 
+        (SELECT DISTINCT locatie_id
+        FROM Angajat_Loc
+        )LOOP
+        
+        total_salary := 0;
+        
+        
+        FOR sal IN SalaryCursor(loc.locatie_id) LOOP
+            
+            total_salary := total_salary + sal.salariu;
+        END LOOP;
+        
+        
+        DBMS_OUTPUT.PUT_LINE('Suma salariilor pentru locatia ' || loc.locatie_id || ': ' || total_salary);
+    END LOOP;
+END CalculateTotalSalariesForEachLocation;
+/
+
+DECLARE
+BEGIN
+    
+    CalculateTotalSalariesForEachLocation;
+END;
+/
+
+
+--EX 8
+
+   CREATE OR REPLACE FUNCTION CalculSumaComenziLocatie(
+      p_locatie_id IN NUMBER,
+      p_data_inceput IN DATE,
+      p_data_sfarsit IN DATE
+   ) RETURN NUMBER IS
+
+      v_suma NUMBER := 0;
+      v_numar_comenzi NUMBER := 0;
+      v_row_count NUMBER := 0;
+      
+      -- Exceptii proprii
+   LocatieNotFound EXCEPTION;
+   InvalidDateRange EXCEPTION;
+
+   BEGIN
+   
+  
+      IF p_data_inceput > p_data_sfarsit THEN
+         RAISE InvalidDateRange;
+      END IF;
+      
+       
+      SELECT COUNT(*)
+      INTO v_numar_comenzi
+      FROM Locatie l
+      JOIN Comanda_Loc cl on l.locatie_id = cl.locatie_id
+      JOIN Comanda c ON cl.comanda_id = c.comanda_id
+      WHERE l.locatie_id = p_locatie_id
+      AND c.data_comanda BETWEEN p_data_inceput AND p_data_sfarsit;
+      
+
+      IF v_numar_comenzi = 0 THEN
+        RAISE LocatieNotFound;
+      END IF;
+
+      
+      SELECT SUM(dc.pret_unitar * dc.cantitate)
+      INTO v_suma
+      FROM Comanda_Loc cl
+      JOIN Comanda c ON cl.comanda_id = c.comanda_id
+      JOIN DetaliiComanda dc ON c.detaliucomanda_id = dc.detaliucomanda_id
+      WHERE cl.locatie_id = p_locatie_id
+      AND c.data_comanda BETWEEN p_data_inceput AND p_data_sfarsit;
+      
+      
+      RETURN v_suma;
+   EXCEPTION
+      WHEN NO_DATA_FOUND THEN
+         DBMS_OUTPUT.PUT_LINE('Nu exista date.');
+         
+      WHEN InvalidDateRange THEN
+         DBMS_OUTPUT.PUT_LINE('Intervalul de date este invalid.');
+         RETURN NULL;
+      WHEN LocatieNotFound THEN
+         DBMS_OUTPUT.PUT_LINE('Locatia nu are comenzi preluate in perioada respectiva.');
+         RETURN NULL;
+      WHEN OTHERS THEN
+         DBMS_OUTPUT.PUT_LINE('O eroare neasteptata a aparut.');
+         RETURN NULL;
+   END CalculSumaComenziLocatie;
+/
+
+DECLARE
+   v_locatie_id NUMBER := 5;
+   v_data_inceput DATE := TO_DATE('10-JAN-2024', 'DD-MON-YYYY');
+   v_data_sfarsit DATE := TO_DATE('30-DEC-2024', 'DD-MON-YYYY');
+   v_suma_comenzi NUMBER;
+
+BEGIN
+   v_suma_comenzi := CalculSumaComenziLocatie(v_locatie_id, v_data_inceput, v_data_sfarsit);
+
+   IF v_suma_comenzi IS NOT NULL THEN
+      DBMS_OUTPUT.PUT_LINE('Suma comenzilor pentru locatia ' || v_locatie_id || ' în perioada ' ||
+                          TO_CHAR(v_data_inceput, 'DD-MON-YYYY') || ' - ' ||
+                          TO_CHAR(v_data_sfarsit, 'DD-MON-YYYY') || ' este: ' || v_suma_comenzi);
+   --ELSE 
+     -- DBMS_OUTPUT.PUT_LINE('NU SUNT COMENZI IN PERIOADA RESP');
+      
+   END IF;
+END;
+/
+
+
+--EX 9
+
+CREATE OR REPLACE PROCEDURE ActualizareSalariu (
+    locatie_id_param IN NUMBER,
+    data_inceput_param IN DATE,
+    data_sfarsit_param IN DATE
+)
+IS
+    v_salariu_bonus CONSTANT NUMBER := 250;  
+
+    -- Exceptie pentru interval de date invalid
+    InvalidDateRange EXCEPTION;
+
+    -- Exceptie pentru prea multe randuri returnate
+    --TooManyRows EXCEPTION;
+
+
+    CURSOR c_employee_data IS
+        SELECT DISTINCT al.angajat_id,
+                        a.nume,
+                        j.job_titlu,
+                        a.salariu,
+                        COUNT(DISTINCT cl.comanda_id) * v_salariu_bonus + a.salariu AS salariu_nou
+        FROM Angajat_Loc al
+        JOIN Comanda_Loc cl ON al.locatie_id = cl.locatie_id
+        JOIN Comanda c ON cl.comanda_id = c.comanda_id
+        JOIN Angajat a ON al.angajat_id = a.angajat_id
+        JOIN Job j ON a.job_id = j.job_id
+        WHERE al.locatie_id = locatie_id_param
+            AND c.data_comanda BETWEEN data_inceput_param AND data_sfarsit_param
+        GROUP BY al.angajat_id, a.nume, j.job_titlu, a.salariu;
+
+    
+    v_row_count NUMBER := 0;
+
+BEGIN
+    -- Verifica daca intervalul de date este valid
+    IF data_inceput_param > data_sfarsit_param THEN
+        RAISE InvalidDateRange;
+    END IF;
+
+   
+    FOR emp_data IN c_employee_data LOOP
+        v_row_count := v_row_count + 1;
+
+        
+        IF v_row_count > 2 THEN
+          RAISE TOO_MANY_ROWS;
+        END IF;
+
+        -- Actualizeaza salariul
+        UPDATE Angajat
+        SET salariu = emp_data.salariu_nou
+        WHERE angajat_id = emp_data.angajat_id;
+    END LOOP;
+
+    -- Verifica daca nu s-au gasit date
+    IF v_row_count = 0 THEN
+       RAISE NO_DATA_FOUND;
+    END IF;
+
+    DBMS_OUTPUT.PUT_LINE('Actualizare salarii finalizata cu succes.');
+EXCEPTION
+    WHEN InvalidDateRange THEN
+        DBMS_OUTPUT.PUT_LINE('Intervalul de date este invalid.');
+    WHEN TOO_MANY_ROWS THEN
+        DBMS_OUTPUT.PUT_LINE('Prea multe randuri returnate.');
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Nu au fost gasite date.');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('O eroare neasteptata a aparut: ' || SQLERRM);
+END ActualizareSalariu;
+/
+
+DECLARE
+    locatie_id_param NUMBER := 4;
+    data_inceput_param DATE := TO_DATE('01-JUN-2024', 'DD-MON-YYYY');
+    data_sfarsit_param DATE := TO_DATE('01-JAN-2023', 'DD-MON-YYYY');
+BEGIN
+    ActualizareSalariu(locatie_id_param, data_inceput_param, data_sfarsit_param);
+END;
+/
+
+
+--EX 10
+
+CREATE OR REPLACE TRIGGER com_trigger
+      BEFORE INSERT OR UPDATE OR DELETE ON Comanda
+BEGIN 
+ IF (TO_CHAR(SYSDATE,'D') = 1) 
+     OR (TO_CHAR(SYSDATE,'HH24') NOT BETWEEN 8 AND 14) 
+ THEN 
+ RAISE_APPLICATION_ERROR(-20001,'tabelul nu poate fi actualizat'); 
+ END IF; 
+ END; 
+ / 
+
+SET SERVEROUTPUT ON;
+UPDATE Comanda SET status = 'finalizata' WHERE comanda_id = 600;
+
+DROP TRIGGER com_trigger;
+
+--EX 11
+
+CREATE OR REPLACE TRIGGER sal_trigger
+  BEFORE UPDATE OF salariu ON Angajat
+  FOR EACH ROW 
+BEGIN 
+  IF (:NEW.salariu > :OLD.salariu) THEN 
+  RAISE_APPLICATION_ERROR(-20002,'salariul nu poate fi marit');
+  END IF; 
+END; 
+/ 
+
+SET SERVEROUTPUT ON;
+UPDATE Angajat SET salariu = salariu+500; 
+
+DROP TRIGGER sal_trigger;
+
+--EX 12
+
+CREATE TABLE Baza
+   (utilizator VARCHAR2(30), 
+    nume_bd VARCHAR2(50), 
+    eveniment VARCHAR2(20), 
+    nume_obiect VARCHAR2(30), 
+    data DATE); 
+    
+CREATE OR REPLACE TRIGGER baz_trigger
+  AFTER CREATE OR DROP OR ALTER ON SCHEMA 
+BEGIN 
+  INSERT INTO Baza
+  VALUES (SYS.LOGIN_USER, SYS.DATABASE_NAME, SYS.SYSEVENT, SYS.DICTIONARY_OBJ_NAME, SYSDATE); 
+  
+END; 
+/ 
+
+CREATE TABLE tempp (t1 varchar(20));
+ALTER TABLE tempp ADD(t2 number(4));
+
+DROP TABLE tempp;
+
+SELECT * FROM Baza; 
+
+DROP TRIGGER baz_trigger;
+
